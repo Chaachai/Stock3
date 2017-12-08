@@ -19,22 +19,22 @@ import static org.junit.Assert.*;
  * @author CHAACHAI Youssef <youssef.chaachai@gmail.com>
  */
 public class ClientServiceTest {
-    
+
     public ClientServiceTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -66,19 +66,30 @@ public class ClientServiceTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
-
+//
+//    /**
+//     * Test of findByCriteria method, of class ClientService.
+//     */
+//    @Test
+//    public void testFindByCriteria() {
+//        System.out.println("findByCriteria");
+//        String idClient = null;
+//        String nom = null;
+//        String prenom = null;
+//        ClientService instance = new ClientService();
+//        List<Client> result = instance.findByCriteria(idClient, nom, prenom);
+//        System.out.println(result);
+//    }
     /**
-     * Test of findByCriteria method, of class ClientService.
+     * Test of deleteClientById method, of class ClientService.
      */
     @Test
-    public void testFindByCriteria() {
-        System.out.println("findByCriteria");
-        String idClient = null;
-        String nom = null;
-        String prenom = null;
+    public void testDeleteClientById() {
+        System.out.println("deleteClientById");
+        String idClient = "C02";
         ClientService instance = new ClientService();
-        List<Client> result = instance.findByCriteria(idClient, nom, prenom);
+        int result = instance.deleteClientById(idClient);
         System.out.println(result);
     }
-    
+
 }

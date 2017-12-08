@@ -8,6 +8,7 @@ package service;
 import bean.ClasseClient;
 import bean.Client;
 import bean.Commande;
+import bean.LigneCommande;
 import java.util.Date;
 import java.util.List;
 
@@ -79,12 +80,30 @@ public class CommandeService extends AbstractFacade<Commande> {
             query += " AND c.client.id ='" + idClient + "'";
         }
         if (dateMax != null) {
-            query += " AND c.dateCommande < " + dateMax;
+            query += " AND c.dateCommande <= " + dateMax;
         }
         if (dateMin != null) {
-            query += " AND c.dateCommande > " + dateMax;
+            query += " AND c.dateCommande >= " + dateMin;
         }
         return getEntityManager().createQuery(query).getResultList();
+    }
+
+    public int deleteCommandeById(String idCommande) {
+        Commande commande = find(idCommande);
+        if (commande != null) {
+            LigneCommandeService ligneCommandeService = new LigneCommandeService();
+            List<LigneCommande> ligneCommandes = ligneCommandeService.findAll();
+            if (!ligneCommandes.isEmpty()) {
+                for (LigneCommande ligneCommande : ligneCommandes) {
+                    if (ligneCommande.getCommande().equals(commande)) {
+                        ligneCommandeService.remove(ligneCommande);
+                    }
+                }
+            }
+            remove(commande);
+            return 1;
+        }
+        return -1;
     }
 
 }

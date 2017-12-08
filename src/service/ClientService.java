@@ -7,6 +7,8 @@ package service;
 
 import bean.ClasseClient;
 import bean.Client;
+import bean.Commande;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +16,13 @@ import java.util.List;
  * @author CHAACHAI Youssef <youssef.chaachai@gmail.com>
  */
 public class ClientService extends AbstractFacade<Client> {
+
     ClasseClientService classeClientService = new ClasseClientService();
+
     public ClientService() {
         super(Client.class);
     }
-    
+
     public void initDB() {
         ajouterClient("C01", "CHAACHAI", "Youssef", "Sidi Abbad", "+212642112113", 4);
         ajouterClient("C02", "OUALILI", "Younesse", "Sidi Abbad", "+212654789621", 4);
@@ -26,9 +30,9 @@ public class ClientService extends AbstractFacade<Client> {
         ajouterClient("C04", "AHMED", "Moussa", "Guiliz", "+212678965410", 4);
         ajouterClient("C05", "MOHAMMED", "Ali", "Daoudiate", "+212612345678", 4);
         ajouterClient("C06", "BENCHARKI", "Achraf", "Massira", "+212645685225", 4);
-        
+
     }
-    
+
     public void ajouterClient(String idClient, String nom, String prenom, String adresse, String telephone, int idClasse) {
         ClasseClient c = classeClientService.find(idClasse);
         Client client = new Client(idClient, nom, prenom, adresse, telephone);
@@ -49,5 +53,24 @@ public class ClientService extends AbstractFacade<Client> {
             query += " AND c.prenom LIKE '" + prenom + "'";
         }
         return getEntityManager().createQuery(query).getResultList();
+    }
+
+    public int deleteClientById(String idClient) {
+        Client client = find(idClient);
+        if (client != null) {
+            CommandeService commandeService = new CommandeService();
+            List<Commande> commandes = commandeService.findAll();
+            if (!commandes.isEmpty()) {
+                for (Commande commande : commandes) {
+                    if (commande.getClient().equals(client)) {
+                        commandeService.remove(commande);
+                    }
+                }
+            }
+            remove(client);
+            return 1;
+
+        }
+        return -1;
     }
 }
